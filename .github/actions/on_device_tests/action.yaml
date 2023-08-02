@@ -100,3 +100,25 @@ runs:
           --change_id "${GITHUB_SHA}" \
           watch ${{ env.SESSION_ID }}
       shell: bash
+    - name: Download ${{ matrix.platform }} Test Results
+      shell: bash
+      env:
+        GCS_PATH: gs://cobalt-unittest-storage/results
+      run: |
+        set -eux
+        gsutil -d cp "${GCS_PATH}/${SESSION_ID}.zip" .
+        if [[ $? -ne 0 ]]; then
+          warn="Unable to download results from ${GCS_PATH}/${SESSION_ID}.zip"
+          echo "::warning title=No unit test results::$warn"
+          exit 0
+        fi
+
+        mkdir -p unit-test-results/${{ matrix.platform }}/${{ matrix.shard }}/
+        unzip ${SESSION_ID}.zip -d unit-test-results/${{ matrix.platform }}/${{ matrix.shard }}/
+    - name: Archive Unit Test Results
+      uses: actions/upload-artifact@v3
+      # TODO: Should only run for unit-tests
+      if: always()
+      with:
+        name: unit-test-results
+        path: unit-test-results/
