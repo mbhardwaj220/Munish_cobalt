@@ -140,6 +140,10 @@ Specifies the preferred byte order of color channels in a pixel. Refer to
 starboard/configuration.h for the possible values. EGL/GLES platforms should
 generally prefer a byte order of RGBA, regardless of endianness.
 
+<<<<<<< HEAD
 ### kSbUserMaxSignedIn
+=======
+### kSbUserMaxSignedIn ###
+>>>>>>> 04d6e8704ba (Update documentation on cobalt.dev (#1406))
 
 The maximum number of users that can be signed in at the same time.
