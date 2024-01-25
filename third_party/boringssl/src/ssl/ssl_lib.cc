@@ -390,8 +390,8 @@ void ssl_ctx_get_current_time(const SSL_CTX *ctx,
     out_clock->tv_usec = time.millitm * 1000;
   }
 #else
-  OPENSSL_port_timeval clock;
-  OPENSSL_port_gettimeofday(&clock, NULL);
+  struct timeval clock;
+  gettimeofday(&clock, NULL);
   if (clock.tv_sec < 0) {
     assert(0);
     out_clock->tv_sec = 0;

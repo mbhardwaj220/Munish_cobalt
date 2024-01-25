@@ -1004,7 +1004,7 @@ static int check_cert(X509_STORE_CTX *ctx)
 
 static int check_crl_time(X509_STORE_CTX *ctx, X509_CRL *crl, int notify)
 {
-  OPENSSL_port_time_t *ptime;
+    time_t *ptime;
     int i;
     if (notify)
         ctx->current_crl = crl;
@@ -1746,7 +1746,7 @@ static int check_policy(X509_STORE_CTX *ctx)
 
 static int check_cert_time(X509_STORE_CTX *ctx, X509 *x)
 {
-  OPENSSL_port_time_t *ptime;
+    time_t *ptime;
     int i;
 
     if (ctx->param->flags & X509_V_FLAG_USE_CHECK_TIME)
@@ -1877,7 +1877,8 @@ int X509_cmp_current_time(const ASN1_TIME *ctm)
     return X509_cmp_time(ctm, NULL);
 }
 
-int X509_cmp_time(const ASN1_TIME *ctm, OPENSSL_port_time_t *cmp_time) {
+int X509_cmp_time(const ASN1_TIME *ctm, time_t *cmp_time)
+{
     static const size_t utctime_length = sizeof("YYMMDDHHMMSSZ") - 1;
     static const size_t generalizedtime_length = sizeof("YYYYMMDDHHMMSSZ") - 1;
     ASN1_TIME *asn1_cmp_time = NULL;
@@ -1946,18 +1947,20 @@ ASN1_TIME *X509_gmtime_adj(ASN1_TIME *s, long offset_sec)
     return X509_time_adj(s, offset_sec, NULL);
 }
 
-ASN1_TIME *X509_time_adj(ASN1_TIME *s, long offset_sec, OPENSSL_port_time_t *in_tm) {
+ASN1_TIME *X509_time_adj(ASN1_TIME *s, long offset_sec, time_t *in_tm)
+{
     return X509_time_adj_ex(s, 0, offset_sec, in_tm);
 }
 
-ASN1_TIME *X509_time_adj_ex(ASN1_TIME *s, int offset_day, long offset_sec,
-                            OPENSSL_port_time_t *in_tm) {
-  OPENSSL_port_time_t t = 0;
+ASN1_TIME *X509_time_adj_ex(ASN1_TIME *s,
+                            int offset_day, long offset_sec, time_t *in_tm)
+{
+    time_t t = 0;
 
     if (in_tm) {
         t = *in_tm;
     } else {
-    OPENSSL_port_time(&t);
+        time(&t);
     }
 
     return ASN1_TIME_adj(s, t, offset_day, offset_sec);
@@ -2405,7 +2408,8 @@ void X509_STORE_CTX_set_flags(X509_STORE_CTX *ctx, unsigned long flags)
 }
 
 void X509_STORE_CTX_set_time(X509_STORE_CTX *ctx, unsigned long flags,
-                             OPENSSL_port_time_t t) {
+                             time_t t)
+{
     X509_VERIFY_PARAM_set_time(ctx->param, t);
 }
 

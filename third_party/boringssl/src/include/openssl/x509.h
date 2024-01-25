@@ -790,7 +790,7 @@ OPENSSL_EXPORT int X509_NAME_get0_der(X509_NAME *nm, const unsigned char **pder,
 //
 // WARNING: Unlike most comparison functions, this function returns zero on
 // error, not equality.
-OPENSSL_EXPORT int X509_cmp_time(const ASN1_TIME *s, OPENSSL_port_time_t *t);
+OPENSSL_EXPORT int X509_cmp_time(const ASN1_TIME *s, time_t *t);
 
 // X509_cmp_current_time behaves like |X509_cmp_time| but compares |s| against
 // the current time.
@@ -798,13 +798,12 @@ OPENSSL_EXPORT int X509_cmp_current_time(const ASN1_TIME *s);
 
 // X509_time_adj calls |X509_time_adj_ex| with |offset_day| equal to zero.
 OPENSSL_EXPORT ASN1_TIME *X509_time_adj(ASN1_TIME *s, long offset_sec,
-                                        OPENSSL_port_time_t *t);
+                                        time_t *t);
 
 // X509_time_adj_ex behaves like |ASN1_TIME_adj|, but adds an offset to |*t|. If
 // |t| is NULL, it uses the current time instead of |*t|.
 OPENSSL_EXPORT ASN1_TIME *X509_time_adj_ex(ASN1_TIME *s, int offset_day,
-                                           long offset_sec,
-                                           OPENSSL_port_time_t *t);
+                                           long offset_sec, time_t *t);
 
 // X509_gmtime_adj behaves like |X509_time_adj_ex| but adds |offset_sec| to the
 // current time.
